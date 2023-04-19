@@ -81,6 +81,8 @@
             <th scope="col">Name</th>
             <th scope="col">Brand</th>
             <th scope="col">Price</th>
+            <th scope="col">Image</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -90,6 +92,8 @@
               <td>{{ smartphone.name }}</td>
               <td>{{ smartphone.brand }}</td>
               <td>{{ smartphone.price }}</td>
+              <td><img src="{{ smartphone.image }}"></td>
+              <td><a href="/theme/smartphones{{smartphone.href}}">Details</a></td>
             </tr>
           {% endfor %}
         </tbody>

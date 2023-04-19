@@ -20,15 +20,19 @@ def get_smartphones(request):
     for page in range(0, 1):
         res = requests.get(f"{url}?page={page}", headers=headers)   # the f is a response object returned by the requests module
         soup = BeautifulSoup(res.text, 'html.parser')
+
         for item in soup.select('.core'):
+            href = item['href']
             name = item['data-name']
             price = item.find('div', {'class': 'prc'}).text
-            image = item.find('img')['src']
+            image = item.find("img")['data-src']
             brand = item['data-brand']
             category = item['data-category']
-            smartphones.append({'name': name, 'price': price, 'brand': brand, 'category': category})
+            smartphones.append({'href': href, 'name': name, 'price': price, 'brand': brand, 'category': category, 'image': image})
             if brand not in brands:
                 brands.append(brand)
+            
+        print(soup.select('.core')[0]['href'])
     return render(request, 'test.html', {'smartphones': smartphones, 'brands': brands})
 
 
@@ -72,3 +76,23 @@ def filter(request):
                 brands.append(item_brand)
     
     return render(request, 'test.html', {'smartphones': smartphones, 'brands': brands})
+
+
+def get_smartphone(request, href):
+    url = 'https://www.jumia.tn/smartphones'+ href
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    
+    res = requests.get(url, headers=headers)   # Use url instead of f"{url}"
+    soup = BeautifulSoup(res.content, 'html.parser')   # Use res.content instead of res
+    section_list = [section for section in soup.body.find_all('section')]
+    
+    if(section_list[1]):
+        name = section_list[1].find('form')['data-name']
+        brand = section_list[1].find('form')['data-brand']
+        image = section_list[1].find('img', class_="-fw -fh")['data-src']
+        price = section_list[1].find('form')['data-price']
+        print(price)
+    
+    # Render the details.html template with the name and price
+    return render(request, 'details.html', {'name': name, 'brand': brand, 'price': price, 'image': image})

@@ -1,0 +1,14 @@
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6" style="margin-left: 35%;">
+        <img src="{{ image }}" alt="{{ name }}" class="img-fluid">
+      </div>
+      <div class="col-md-6" style="text-align: center">
+        <h2>{{ brand }} {{ name }}</h2>
+        <h4 class="text-success">{{ price }} TND</h4>
+        <button class="btn btn-primary"><a href="/theme/smartphones">Retour vers la liste des smartphones</a></button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
